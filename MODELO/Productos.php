@@ -36,6 +36,26 @@ class Producto {
         return $this->pdo->Arreglos($sql);
     }
     
+    // MÉTODO ELIMINAR CORREGIDO
+    public function eliminar($id) {
+        try {
+            // Opción 1: Si tu clase DB tiene método execute()
+            if (method_exists($this->pdo, 'execute')) {
+                $sql = "DELETE FROM productos WHERE id = ?";
+                return $this->pdo->execute($sql, [$id]);
+            }
+            // Opción 2: Usar PDO directamente
+            else {
+                $sql = "DELETE FROM productos WHERE id = :id";
+                $stmt = $this->pdo->prepare($sql);
+                return $stmt->execute(['id' => $id]);
+            }
+        } catch(PDOException $e) {
+            $this->errors[] = "Error al eliminar: " . $e->getMessage();
+            return false;
+        }
+    }
+    
     public function validar() {
         $this->errors = [];
         

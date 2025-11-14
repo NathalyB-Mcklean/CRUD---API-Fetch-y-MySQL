@@ -48,7 +48,23 @@ switch($accion) {
         $response["success"] = true;
         $response["data"] = $resultados;
         break;
-        
+
+   case "Eliminar":
+    $id = $_POST['id'] ?? 0;
+    
+    if($id > 0) {
+        if($producto->eliminar($id)) {
+            $response["success"] = true;
+            $response["message"] = "Producto eliminado exitosamente";
+        } else {
+            $response["message"] = "Error al eliminar el producto";
+            $response["errors"] = $producto->errors;
+        }
+    } else {
+        $response["message"] = "ID inválido para eliminar";
+    }
+    break;
+    
     default:
         $response["message"] = "Acción no válida";
 }
